@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.0-alpha.2
+
+- Send relevant node definitions instead of the full installed catalog.
+- Compact input metadata and bound model/widget choice lists to avoid oversized context on simple requests.
+
 ## 0.1.0-alpha.1
 
 - Initial Codex chat sidebar and local CLI bridge.

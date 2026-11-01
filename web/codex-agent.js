@@ -7,10 +7,41 @@ let pending = null;
 let undo = null;
 let busy = false;
 
+function compactInputs(inputs) {
+    return Object.fromEntries(Object.entries(inputs || {}).map(([name, spec]) => {
+        const type = spec[0];
+        const options = spec[1] || {};
+        return [name, [Array.isArray(type) ? type.slice(0, 40) : type,
+            Object.fromEntries(["default", "min", "max", "step", "forceInput", "multiline"].filter(key => key in options).map(key => [key, options[key]]))]];
+    }));
+}
+
+function selectDefinitions(message, workflow) {
+    const selected = {};
+    const existing = new Set((workflow.nodes || []).map(node => node.type));
+    const basic = new Set(["CheckpointLoaderSimple", "CLIPTextEncode", "EmptyLatentImage", "KSampler", "VAEDecode", "SaveImage", "LoadImage", "ControlNetLoader", "ControlNetApplyAdvanced", "ControlNetApply", "Canny", "ImageScale"]);
+    const words = message.toLowerCase().match(/[a-z0-9]{3,}/g) || [];
+    const ranked = Object.keys(definitions).map(name => {
+        const search = `${name} ${definitions[name].category}`.toLowerCase();
+        return { name, score: words.reduce((score, word) => score + (search.includes(word) ? 1 : 0), 0) };
+    }).filter(item => item.score).sort((a, b) => b.score - a.score).slice(0, 24).map(item => item.name);
+    let size = 0;
+    for (const name of new Set([...existing, ...basic, ...ranked])) {
+        const def = definitions[name];
+        if (!def) continue;
+        const compact = { category: def.category, input: { required: compactInputs(def.input?.required), optional: compactInputs(def.input?.optional) }, output: def.output, output_name: def.output_name };
+        const length = JSON.stringify(compact).length;
+        if (size + length > 120000 && !existing.has(name)) continue;
+        selected[name] = compact;
+        size += length;
+    }
+    return selected;
+}
+
 function widgetInfo(node) {
     return Object.fromEntries((node.widgets || []).filter(w => w.type !== "button").map(w => [w.name, {
         value: w.value,
-        ...(Array.isArray(w.options?.values) ? { choices: w.options.values } : {})
+        ...(Array.isArray(w.options?.values) ? { choices: w.options.values.slice(0, 40) } : {})
     }]));
 }
 
@@ -114,7 +145,7 @@ app.registerExtension({
                 const widgets = Object.fromEntries(app.graph._nodes.map(n => [n.id, widgetInfo(n)]));
                 const response = await api.fetchApi("/codex-agent/chat", {
                     method: "POST", headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ message, workflow, widgets, definitions, history: history.slice(-10) })
+                    body: JSON.stringify({ message, workflow, widgets, definitions: selectDefinitions(message, workflow), history: history.slice(-10) })
                 });
                 const data = await response.json();
                 if (!response.ok) throw new Error(data.error || `Request failed (${response.status}).`);

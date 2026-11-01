@@ -4,7 +4,7 @@ from pathlib import Path
 import zipfile
 
 ROOT = Path(__file__).resolve().parent
-VERSION = "0.1.0-alpha.1"
+VERSION = "0.1.0-alpha.2"
 FILES = ("__init__.py", "instructions.txt", "response.schema.json", "web/codex-agent.js",
          "README.md", "LICENSE", "CHANGELOG.md", "pyproject.toml", "install.py")
 

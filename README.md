@@ -2,7 +2,7 @@
 
 A chat sidebar that uses your local Codex CLI to propose changes to ComfyUI workflows. Created by [SDHANA768](https://github.com/SDHANA768). Independent community extension; not affiliated with OpenAI or Comfy Org.
 
-**v0.1.0-alpha.1 — early preview.** The Codex connection and edit logic have been tested. Full interactive verification in ComfyUI and testing on macOS/Linux are still pending. Save important workflows before trying it.
+**v0.1.0-alpha.2 — early preview.** The Codex connection and edit logic have been tested. Full interactive verification in ComfyUI and testing on macOS/Linux are still pending. Save important workflows before trying it.
 
 ## Features
 
@@ -36,7 +36,7 @@ Restart ComfyUI. Open **Codex Agent** in the sidebar. No additional Python packa
 
 ## Install from ZIP
 
-Download the [v0.1.0-alpha.1 installation ZIP](https://github.com/SDHANA768/comfyui-codex-agent/raw/refs/heads/main/packages/comfyui-codex-agent-0.1.0-alpha.1.zip) ([SHA-256 checksum](https://github.com/SDHANA768/comfyui-codex-agent/blob/main/packages/comfyui-codex-agent-0.1.0-alpha.1.zip.sha256)).
+Download the [v0.1.0-alpha.2 installation ZIP](https://github.com/SDHANA768/comfyui-codex-agent/raw/refs/heads/main/packages/comfyui-codex-agent-0.1.0-alpha.2.zip) ([SHA-256 checksum](https://github.com/SDHANA768/comfyui-codex-agent/blob/main/packages/comfyui-codex-agent-0.1.0-alpha.2.zip.sha256)).
 
 Download GitHub's **Code → Download ZIP**, or an installation ZIP from a release. Extract it and move the extension folder to `ComfyUI/custom_nodes/comfyui-codex-agent`. The final layout must be:
 
@@ -66,7 +66,7 @@ Choose the folder containing `main.py` and `custom_nodes`. On Windows, use the C
 
 ## Data and access
 
-Clicking Send shares your message, workflow, node definitions, widget values/model filenames, and recent chat with Codex. It does not upload image files. Chat history stays in browser memory until cleared or reloaded. Codex's own data handling follows your account configuration.
+Clicking Send shares your message, workflow, relevant node definitions, widget values/model filenames, and recent chat with Codex. It does not upload image files. Chat history stays in browser memory until cleared or reloaded. Codex's own data handling follows your account configuration.
 
 Credentials remain managed by the Codex CLI. Do not paste tokens or API keys into the panel. The endpoint accepts loopback clients with matching browser origins. Use local ComfyUI without a reverse proxy for this preview. These checks are not a substitute for securing your computer.
 
@@ -88,3 +88,4 @@ Update a Git installation with `git pull` inside the extension folder, then rest
 Run `node tests/test_edits.cjs` and `python -m unittest discover -s tests`. Python tests need `aiohttp`, already included with ComfyUI. Tests do not call Codex or need a login. Build an installation ZIP with `python build_package.py`.
 
 See [CHANGELOG.md](CHANGELOG.md). Licensed under [MIT](LICENSE).
+
