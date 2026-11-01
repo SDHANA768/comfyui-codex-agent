@@ -1,0 +1,11 @@
+[project]
+name = "comfyui-codex-agent"
+version = "0.1.0a1"
+description = "A Codex chat sidebar for building and editing ComfyUI workflows"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+authors = [{name = "SDHANA768"}]
+
+[project.urls]
+Repository = "https://github.com/SDHANA768/comfyui-codex-agent"
+Issues = "https://github.com/SDHANA768/comfyui-codex-agent/issues"
